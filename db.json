@@ -1,0 +1,152 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Phạm Văn Hưởng",
+      "email": "huong@gmail.com",
+      "phoneNumber": "0398494251",
+      "password": "123456",
+      "role": "user",
+      "level": "vip"
+    },
+    {
+      "id": 2,
+      "name": "Admin",
+      "email": "admin",
+      "phoneNumber": "admin",
+      "password": "123456",
+      "role": "admin",
+      "level": "vip"
+    },
+    {
+      "id": 3,
+      "name": "Đỗ Duy Hưng",
+      "email": "hung@gmail.com",
+      "phoneNumber": "0398494251",
+      "password": "123456",
+      "role": "user",
+      "level": "normal"
+    }
+  ],
+  "songs": [
+    {
+      "id": 1,
+      "name": "Faded",
+      "singger": "Alan Walker",
+      "path": "./assets/music/song0.mp3",
+      "image": "./assets/img/singger/image0.jpg"
+    },
+    {
+      "id": 2,
+      "name": "Believer",
+      "singger": "Imagine Dragons",
+      "path": "./assets/music/song1.mp3",
+      "image": "./assets/img/singger/image1.jpg"
+    },
+    {
+      "id": 3,
+      "name": "Radioactive",
+      "singger": "Imagine Dragons",
+      "path": "./assets/music/song2.mp3",
+      "image": "./assets/img/singger/image2.jpg"
+    },
+    {
+      "id": 4,
+      "name": "Spectre",
+      "singger": "Alan Walker",
+      "path": "./assets/music/song3.mp3",
+      "image": "./assets/img/singger/image3.jpg"
+    },
+    {
+      "id": 5,
+      "name": "Basta Boi Remix",
+      "singger": "Alfons",
+      "path": "./assets/music/song4.mp3",
+      "image": "./assets/img/singger/image4.jpg"
+    },
+    {
+      "id": 6,
+      "name": "Havana",
+      "singger": "Camila Cabello",
+      "path": "./assets/music/song5.mp3",
+      "image": "./assets/img/singger/image5.jpg"
+    },
+    {
+      "id": 7,
+      "name": "Memories",
+      "singger": "Maroon 5",
+      "path": "./assets/music/song6.mp3",
+      "image": "./assets/img/singger/image6.jpg"
+    },
+    {
+      "id": 8,
+      "name": "Bones",
+      "singger": "Imagine Dragons",
+      "path": "./assets/music/song7.mp3",
+      "image": "./assets/img/singger/image7.jpg"
+    },
+    {
+      "id": 9,
+      "name": "Demons",
+      "singger": "Imagine Dragons",
+      "path": "./assets/music/song8.mp3",
+      "image": "./assets/img/singger/image8.jpg"
+    },
+    {
+      "id": 10,
+      "name": "Natural",
+      "singger": "Imagine Dragons",
+      "path": "./assets/music/song9.mp3",
+      "image": "./assets/img/singger/image9.jpg"
+    },
+    {
+      "id": 11,
+      "name": "Whatever it takes",
+      "singger": "Imagine Dragons",
+      "path": "./assets/music/song10.mp3",
+      "image": "./assets/img/singger/image10.jpg"
+    },
+    {
+      "id": 12,
+      "name": "Enemy",
+      "singger": "Imagine Dragons",
+      "path": "./assets/music/song11.mp3",
+      "image": "./assets/img/singger/image11.jpg"
+    },
+    {
+      "id": 13,
+      "name": "Sugar",
+      "singger": "Maroon 5",
+      "path": "./assets/music/song12.mp3",
+      "image": "./assets/img/singger/image12.jpg"
+    },
+    {
+      "id": 14,
+      "name": "Wellerman",
+      "singger": "Nathen Evans",
+      "path": "./assets/music/song13.mp3",
+      "image": "./assets/img/singger/image13.jpg"
+    },
+    {
+      "id": 15,
+      "name": "Masked Heroes",
+      "singger": "Vexento",
+      "path": "./assets/music/song14.mp3",
+      "image": "./assets/img/singger/image14.jpg"
+    },
+    {
+      "id": 2,
+      "name": "Nevada",
+      "singger": "Vicetone",
+      "path": "./assets/music/song15.mp3",
+      "image": "./assets/img/singger/image15.jpg"
+    },
+    {
+      "id": 16,
+      "name": "Warriors",
+      "singger": "Imagine Dragons",
+      "path": "./assets/music/song16.mp3",
+      "image": "./assets/img/singger/image16.jpg"
+    }
+  ]
+}
