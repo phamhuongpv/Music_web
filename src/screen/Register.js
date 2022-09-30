@@ -1,5 +1,86 @@
+import "./login.css"
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 
 function Register() {
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+	const [checkPassword, setCheckPassword] = useState("");
+	const [phoneNumber, setPhoneNumber] = useState("");
+
+    const userData = [];
+    const navigate = useNavigate();
+
+    const registerFunction = () => {
+		let isCheck = true;
+		var postRegister = {
+            "name": name,
+            "email": email,
+            "phoneNumber": phoneNumber,
+            "password": password,
+            "role": "user",
+            "level": "normal"
+        }
+
+		if (email) {
+			if ( (email == "") && (email != "admin")) {
+				alert("Email không được để trống");
+				isCheck = false;
+			} else if (!isEmail(email) && (email != "admin")) {
+				alert("Email không đúng định dạng");
+				isCheck = false;
+			}
+			if (password == '') {
+				alert("Password không được để trống");
+				isCheck = false;
+			}
+            if (password != checkPassword) {
+				alert("Mật khẩu xác nhận không khớp");
+				isCheck = false;
+			}
+            if (phoneNumber == '') {
+				alert("Phone number không được để trống");
+				isCheck = false;
+			}
+            if (name == '') {
+				alert("Name không được để trống");
+				isCheck = false;
+			}
+		}
+		
+		if(isCheck == true) {
+			axios.post('http://localhost:3004/users', postRegister)
+			.then(res => {
+				if(userData) {userData.shift();}
+				userData.push(res.data);
+			})
+			setTimeout(isRegister, 1000);
+		}
+	}
+
+    const isRegister = () => {
+		if(userData[0].status == "Error") {alert("Thông tin đăng nhập không chính xác");} else {
+			const setJsonData=JSON.stringify(userData[0]);
+			localStorage.setItem('user', setJsonData);
+			checkRegister();
+        }
+	}
+
+	function isEmail(email) {
+		return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
+			email
+		);
+	}
+
+	const checkRegister = () => {
+        const dataLocal = localStorage.getItem('user');
+        const userLocal  = JSON.parse(dataLocal);
+        alert('Đăng kí thành công, vui lòng đăng nhập để tiếp tục')
+        navigate("/login", { replace: true });
+    }
+
     return (
         <div className="mainLogin">
         <form action="" method="post" id="form1" className="form">
@@ -14,70 +95,40 @@ function Register() {
             <div className="spacer"></div>
 
             <div className="form-group">
-                <label for="fullName" className="form-label">Tên đầy đủ</label>
-                <input id="fullName" name="fullName" type="text" className="form-control" placeholder="VD: Phạm Văn Hưởng" />
+                <label htmlFor="fullName" className="form-label">Tên đầy đủ</label>
+                <input id="fullName" name="fullName" type="text" className="form-control" placeholder="VD: Phạm Văn Hưởng" onChange={(event) => {setName(event.target.value)}} required/>
                 <span className="form-message"></span>
             </div>
 
             <div>
                 <div className="form-group">
-                    <label for="email" className="form-label">Email</label>
-                    <input id="email" name="email" type="text" className="form-control" placeholder="VD: email@domain.com" />
+                    <label htmlFor="email" className="form-label">Email</label>
+                    <input id="email" name="email" type="text" className="form-control" placeholder="VD: email@domain.com" onChange={(event) => {setEmail(event.target.value)}} required/>
                     <span className="form-message"></span>
                 </div>
             </div>
 
             <div>
                 <div className="form-group">
-                    <label for="phone" className="form-label">Số điện thoại</label>
-                    <input id="phone" name="phone" type="text" className="form-control" placeholder="VD: 0398494251" />
+                    <label htmlFor="phone" className="form-label">Số điện thoại</label>
+                    <input id="phone" name="phone" type="text" className="form-control" placeholder="VD: 0398494251" onChange={(event) => {setPhoneNumber(event.target.value)}} required/>
                     <span className="form-message"></span>
                 </div>
             </div>
 
             <div className="form-group">
-                <label for="password" className="form-label">Mật khẩu</label>
-                <input id="password" name="password" type="password" className="form-control" placeholder="Nhập mật khẩu" />
+                <label htmlFor="password" className="form-label">Mật khẩu</label>
+                <input id="password" name="password" type="password" className="form-control" placeholder="Nhập mật khẩu" onChange={(event) => {setPassword(event.target.value)}} required/>
                 <span className="form-message"></span>
             </div>
             
             <div className="form-group">
-                <label for="password_confirmation" className="form-label">Nhập lại mật khẩu</label>
-                <input id="password_confirmation" name="password_confirmation" type="password" className="form-control" placeholder="Nhập lại mật khẩu" />
+                <label htmlFor="password_confirmation" className="form-label">Nhập lại mật khẩu</label>
+                <input id="password_confirmation" name="password_confirmation" type="password" className="form-control" placeholder="Nhập lại mật khẩu" onChange={(event) => {setCheckPassword(event.target.value)}} required/>
                 <span className="form-message"></span>
             </div>
-            
-            {/* <div className="form-group">
-                <label for="province" className="form-label">Nơi sinh sống</label>
-                <select id="province" name="province" className="form-control">
-                    <option value="">-- Chọn Tỉnh/TP --</option>
-                    <option value="Hà Nội">Hà Nội</option>
-                    <option value="Thừa Thiên Huế">Thừa Thiên Huế</option>
-                    <option value="Hồ Chí Minh">Hồ Chí Minh</option>
-                </select>
-                <span className="form-message"></span>
-            </div> */}
-            
-            {/* <div className="form-group">
-                <label for="sex" className="form-label">Giới tính</label>
-                <div className="radioBox">
-                    <div className="radioBox-child">
-                        <input id="sex" name="sex" type="radio" value="male" className="form-control" />
-                        Nam
-                    </div>
-                    <div className="radioBox-child">
-                        <input id="sex" name="sex" type="radio" value="female" className="form-control" />
-                        Nữ
-                    </div>
-                    <div className="radioBox-child">
-                        <input id="sex" name="sex" type="radio" value="other" className="form-control" />
-                        Khác
-                    </div>
-                </div>
-                <span className="form-message"></span>
-            </div> */}
 
-            <button className="form-submit">Đăng kí</button>
+            <div className="form-submit" onClick={registerFunction}>Đăng kí</div>
         </form>
     </div>
     )

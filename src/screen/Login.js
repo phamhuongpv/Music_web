@@ -41,8 +41,6 @@ function Login() {
 				userData.push(res.data);
 			})
 			setTimeout(isLogin, 1000);
-
-		    
 		}
 	}
 
@@ -64,8 +62,8 @@ function Login() {
 	const checkLogin = () => {
         const dataLocal = localStorage.getItem('user');
         const userLocal  = JSON.parse(dataLocal);
-        if(userLocal[0].role == "user") { navigate("/HomeUser", { replace: true }); }
-        if(userLocal[0].role == "admin") { navigate("/HomeAdmin", { replace: true }); }
+        if(userLocal[0].role == "user") { navigate("/homeUser", { replace: true }); }
+        if(userLocal[0].role == "admin") { navigate("/adminsongs", { replace: true }); }
     }
 
     return (

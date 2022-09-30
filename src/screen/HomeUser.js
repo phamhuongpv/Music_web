@@ -1,12 +1,14 @@
 import "./home.css"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faArrowRight, faMagnifyingGlass, faMusic, faAnglesRight, faCompactDisc, faRecordVinyl, faMicrophoneLines, faGripVertical, faClockRotateLeft, faUpload, faRightFromBracket, faRedo, faStepBackward, faPause, faPlay, faStepForward, faRandom, faVolumeXmark, faVolumeLow, faVolumeHigh, faHouseMedicalCircleExclamation } from "@fortawesome/free-solid-svg-icons";
+import { faClipboardUser, faCompass, faStar, faArrowLeft, faArrowRight, faMagnifyingGlass, faUser, faMusic, faAnglesRight, faCompactDisc, faRecordVinyl, faMicrophoneLines, faGripVertical, faClockRotateLeft, faUpload, faRightFromBracket, faRedo, faStepBackward, faPause, faPlay, faStepForward, faRandom, faVolumeXmark, faVolumeLow, faVolumeHigh, faHouseMedicalCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 function HomeUser() {
     const dataLocal = localStorage.getItem('user');
     const userLocal  = JSON.parse(dataLocal);
+    const navigate = useNavigate();
     const $ = document.querySelector.bind(document);
     const $$ = document.querySelectorAll.bind(document);
 
@@ -29,14 +31,49 @@ function HomeUser() {
     let isRepeat = false;
 
     const [songs, setSongs] = useState("");
+    const [albums, setAlbums] = useState("");
+    const [singers, setSingers] = useState("");
+    const [top100, setTop100] = useState("");
+
+    const [searchKey, setSearchKey] = useState("");
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isplaying, setIsplaying] = useState(false);
+
+    function handelSearch() {
+        const setJsonData=JSON.stringify(searchKey);
+		localStorage.setItem('search', setJsonData);
+        navigate("/search", { replace: true });
+    }
 
     useEffect(() => {
         fetch("http://localhost:3004/songs")
         .then(res => res.json())
         .then(data =>{
             setSongs(data);
+        })
+    },[])
+
+    useEffect(() => {
+        fetch("http://localhost:3004/albums")
+        .then(res => res.json())
+        .then(data =>{
+            setAlbums(data);
+        })
+    },[])
+
+    useEffect(() => {
+        fetch("http://localhost:3004/singers")
+        .then(res => res.json())
+        .then(data =>{
+            setSingers(data);
+        })
+    },[])
+
+    useEffect(() => {
+        fetch("http://localhost:3004/top100")
+        .then(res => res.json())
+        .then(data =>{
+            setTop100(data);
         })
     },[])
 
@@ -90,7 +127,23 @@ function HomeUser() {
         setCurrentIndex(index)
     }
 
-    if(songs.length != 0) return (
+    // Xử lí chọn album
+    function handelAlbum(index) {
+        const setJsonData=JSON.stringify(index + 1);
+		localStorage.setItem('albumChoose', setJsonData);
+
+        navigate("/albuminfo", { replace: true });
+    }
+
+    //Xử lí chọn ca sĩ
+    function handelSinger(index) {
+        const setJsonData=JSON.stringify(index + 1);
+		localStorage.setItem('singerChoose', setJsonData);
+
+        navigate("/singerinfo", { replace: true });
+    }
+
+    if(songs.length != 0 && albums.length != 0 && singers.length != 0 && top100.length != 0) return (
         <div className="root">
             <div className="container">
                 {/* Header */}
@@ -108,9 +161,11 @@ function HomeUser() {
 
                         {/* Search */}
                         <div className="search">
-                            <i><FontAwesomeIcon icon={faMagnifyingGlass}></FontAwesomeIcon></i>
+                            <i onClick={() => handelSearch()}><FontAwesomeIcon icon={faMagnifyingGlass}></FontAwesomeIcon></i>
                             <div className="search-content">
-                                <input className="search-input" type="text" placeholder="Nhập tên bài hát cần tìm kiếm..."/>
+                                <input className="search-input" type="text" placeholder="Nhập tên bài hát cần tìm kiếm..."
+                                    onChange={(e) => setSearchKey(e.target.value)}
+                                />
                             </div>
                         </div>
                     </div>
@@ -137,29 +192,35 @@ function HomeUser() {
                         {/* Nav bar main */}
                         <div className="nav-bar nar-bar-main">
                             <li className="nav-bar-item active">
-                                <a href="#" className="title">
+                                <a href="/homeUser" className="title">
+                                    <i><FontAwesomeIcon icon={faCompass}></FontAwesomeIcon></i>
+                                    <span>khám phá</span>
+                                </a>
+                            </li>
+                            <li className="nav-bar-item">
+                                <a href="/songs" className="title">
                                     <i><FontAwesomeIcon icon={faMusic}></FontAwesomeIcon></i>
                                     <span>Bài hát</span>
                                 </a>
                             </li>
                             <li className="nav-bar-item">
-                                <a href="#" className="title">
+                                <a href="/singer" className="title">
+                                    <i><FontAwesomeIcon icon={faClipboardUser}></FontAwesomeIcon></i>
+                                    <span>Ca sĩ</span>
+                                </a>
+                            </li>
+                            <li className="nav-bar-item">
+                                <a href="/albums" className="title">
                                     <i><FontAwesomeIcon icon={faCompactDisc}></FontAwesomeIcon></i>
-                                    <span>Ablum</span>
+                                    <span>Album</span>
                                 </a>
                             </li>
-                            <li className="nav-bar-item">
-                                <a href="#" className="title">
-                                    <i><FontAwesomeIcon icon={faMicrophoneLines}></FontAwesomeIcon></i>
-                                    <span>Nghệ sĩ</span>
+                            {/* <li className="nav-bar-item">
+                                <a href="/top100" className="title">
+                                    <i><FontAwesomeIcon icon={faStar}></FontAwesomeIcon></i>
+                                    <span>Top 100</span>
                                 </a>
-                            </li>
-                            <li className="nav-bar-item">
-                                <a href="#" className="title">
-                                    <i><FontAwesomeIcon icon={faGripVertical}></FontAwesomeIcon></i>
-                                    <span>Thể loại</span>
-                                </a>
-                            </li>
+                            </li> */}
                         </div>
                     </div>
 
@@ -172,21 +233,9 @@ function HomeUser() {
                     <div className="side-bar-user">
                         <div className="nav-bar nar-bar-user">
                             <li className="nav-bar-item">
-                                <a href="#" className="title">
-                                    <i><FontAwesomeIcon icon={faRecordVinyl}></FontAwesomeIcon></i>
-                                    <span>My album</span>
-                                </a>
-                            </li>
-                            <li className="nav-bar-item">
-                                <a href="#" className="title">
-                                    <i><FontAwesomeIcon icon={faClockRotateLeft}></FontAwesomeIcon></i>
-                                    <span>Lịch sử</span>
-                                </a>
-                            </li>
-                            <li className="nav-bar-item">
-                                <a href="#" className="title">
-                                    <i><FontAwesomeIcon icon={faUpload}></FontAwesomeIcon></i>
-                                    <span>Tải nhạc lên</span>
+                                <a href="/userInfo" className="title">
+                                    <i><FontAwesomeIcon icon={faUser}></FontAwesomeIcon></i>
+                                    <span>Cá nhân</span>
                                 </a>
                             </li>
                         </div>
@@ -195,10 +244,13 @@ function HomeUser() {
                     {/* Register vip*/}
                     <div className="side-bar__vip">
                         <div className="vip-container">
-                            Nghe kho nhạc
+                            {userLocal[0].level == 'vip'? 'Thành viên':'Nghe kho nhạc'}
                             <br/>
                             vip
-                            <button className="vip-register-btn">Đăng kí</button>
+                            <div 
+                                className={`vip-register-btn ${userLocal[0].level == 'vip'? 'none':''}`}
+                                onClick={() => navigate("/registerVip", { replace: true })}
+                            >Đăng kí</div>
                         </div>
                     </div>
 
@@ -221,9 +273,9 @@ function HomeUser() {
                 <div className="current-song">
                     <div className="current-song-flex">
                         {/* Song info */}
-                        <div className="current-song-info">
+                        <div className="current-song-info w-3">
                             <div className="cd">
-                                <div className="cd-thumb" style={{backgroundImage: `url(${require(`${songs[currentIndex].image}`)})`}}>
+                                <div className="cd-thumb" style={{backgroundImage: `url(${songs[currentIndex].image})`}}>
                                 </div>
                             </div>
                             <div className="song-info">
@@ -237,7 +289,7 @@ function HomeUser() {
                         </div>
 
                         {/* Song control */}
-                        <div className="current-song-control">
+                        <div className="current-song-control w-3">
                             <div className="control">
                                 <div className="btn btn-repeat">
                                     <i><FontAwesomeIcon icon={faRedo}></FontAwesomeIcon></i>
@@ -267,18 +319,18 @@ function HomeUser() {
                                 onPlay={(e) => audioPlay()}
                                 onPause={(e) => audioPause()}
                                 onTimeUpdateCapture={() => onTimeUpdate()}
-                                src={require(`${songs[currentIndex].path}`)}></audio>
+                                src={songs[currentIndex].path}></audio>
                         </div>
 
                         {/* Song setting */}
-                        <div className="current-song-setting">
+                        <div className="current-song-setting w-3">
                             <div className="current-song-volume">
                                 <div className="volume-icon low">
                                     <i className="volume-mute"><FontAwesomeIcon icon={faVolumeXmark}></FontAwesomeIcon></i>
                                     <i className="volume-low"><FontAwesomeIcon icon={faVolumeLow}></FontAwesomeIcon></i>
                                     <i className="volume-hight"><FontAwesomeIcon icon={faVolumeHigh}></FontAwesomeIcon></i>
                                 </div>
-                                <input id="progress-volume" className="progress" type="range" defaultValue="0" step="1" min="0" max="100"/>
+                                <input id="progress-volume" className="progress" type="range" defaultValue="50" step="1" min="0" max="100"/>
                             </div>
                         </div>
                     </div>
@@ -287,47 +339,140 @@ function HomeUser() {
 
                 {/* Main */}
                 <div className="main">
-                    <div className="song-main">
-                        <div className="title">
-                            Danh sách bài hát
-                            <i><FontAwesomeIcon icon={faAnglesRight}></FontAwesomeIcon></i>
+                    <div className="home-main">
+                        {/* List album */}
+                        <div className="home-album">
+                            <div className="title-wrap">
+                                <div className="title">
+                                    Gợi ý hôm nay
+                                </div>
+                            </div>
+
+                            <div className="list-album">
+                                {albums.slice(0, 5).map((album, index) => {
+                                    return (
+                                        <div className="album-container w-5">
+                                            <a href="#" className="home-album-image"
+                                                style={{backgroundImage: `url(${album.image})`}}
+                                                onClick={() => handelAlbum(index)}
+                                            >
+                                            </a>
+                                            <div className="home-album-name">
+                                                {album.name}
+                                            </div>
+                                            <div className="home-album-introduce">
+                                                {album.introduce}
+                                            </div>
+                                        </div>
+                                    )
+                                })}
+                            </div>
                         </div>
-                        
+
                         {/* List song */}
-                        <div className="list-song">
-                            {songs.map((song, index) => {
-                                return (
-                                    <div className={`song-info-container ${currentIndex == index ? 'active': ''}`} key={index} data-index = {index}>
-                                        <div className="current-song-info">
-                                            <div className="cd" onClick={() => choeseSong(index)}>
-                                                <div className="cd-thumb"
-                                                    style={{backgroundImage: `url(${require(`${song.image}`)})`}}>
+                        <div className="home-song">
+                            <div className="title-wrap">
+                                <div className="title">
+                                    Bài hát nổi bật
+                                </div>
+                                <a href="/songs">
+                                    Xem tất cả
+                                    <i><FontAwesomeIcon icon={faAnglesRight}></FontAwesomeIcon></i>
+                                </a>
+                            </div>
+                            
+                            <div className="list-song">
+                                {songs.slice(0, 9).map((song, index) => {
+                                    return (
+                                        <div className={`song-info-container ${currentIndex == index ? 'active': ''} w-3`} key={index} data-index = {index}>
+                                            <div className="current-song-info">
+                                                <div className="cd" onClick={() => {
+                                                        if(userLocal[0].level != 'vip' && song.vip == 'Vip') {
+                                                            alert('Bài này cần mất phí để nghe bấm oke để chuyển sang trang đăng kí thành viên vip')
+                                                            navigate("/registerVip", { replace: true });
+                                                        }
+                                                        else {
+                                                            choeseSong(index)
+                                                        }
+                                                    }}>
+                                                    <div className="cd-thumb"
+                                                        style={{backgroundImage: `url(${song.image})`}}>
+                                                    </div>
+                                                </div>
+                                                <div className="song-info">
+                                                    <div className="song-name">
+                                                        {song.name}
+                                                        <span className={`card ${song.vip == "Vip"?'vip-member':'normal-member'}`}>
+                                                            {`${song.vip == "Vip"? 'Vip': ''}`}
+                                                        </span>
+                                                    </div>
+                                                    <div className="singger-name">
+                                                        {singers[song.singgerId - 1].name}
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div className="song-info">
-                                                <div className="song-name">
-                                                    {song.name}
-                                                </div>
-                                                <div className="singger-name">
-                                                    {song.singger}
-                                                </div>
-                                            </div>
                                         </div>
-                                        <div className="time">
-                                            03:04
-                                        </div>
-                                        <div className="vip">
-                                            <div className="card vip-member">
-                                                Vip
-                                            </div>
-                                        </div>
-                                        <div className="play-icon">
-                                            <i><FontAwesomeIcon icon={faPlay}></FontAwesomeIcon></i>
-                                        </div>
-                                    </div>
-                                )
-                            })}
+                                    )
+                                })}
+                            </div>
                         </div>
+
+                        {/* List singer */}
+                        <div className="home-singer">
+                            <div className="title-wrap">
+                                <div className="title">
+                                    Ca sĩ
+                                </div>
+                                <a href="singer">
+                                    Xem tất cả
+                                    <i><FontAwesomeIcon icon={faAnglesRight}></FontAwesomeIcon></i>
+                                </a>
+                            </div>
+                            <div className="list-singer">
+                                {singers.slice(0, 5).map((singer, index) => {
+                                    return (
+                                        <div className="singer-container w-5">
+                                            <a href="#" className="home-singer-image"
+                                                style={{backgroundImage: `url(${singer.image})`}}
+                                                onClick={() => handelSinger(index)}
+                                            >
+                                            </a>
+                                            <div className="home-singer-name">
+                                                {singer.name}
+                                            </div>
+                                        </div>
+                                    )
+                                })}
+                            </div>
+                        </div>
+
+                        {/* List top100 */}
+                        {/* <div className="home-top100">
+                            <div className="title-wrap">
+                                <div className="title">
+                                    Top 100
+                                </div>
+                                <a href="/top100">
+                                    Xem tất cả
+                                    <i><FontAwesomeIcon icon={faAnglesRight}></FontAwesomeIcon></i>
+                                </a>
+                            </div>
+
+                            <div className="list-top100">
+                                {top100.slice(0, 5).map((top, index) => {
+                                    return (
+                                        <div className="top100-container w-5">
+                                            <a href="#" className="home-top100-image"
+                                                style={{backgroundImage: `url(${top.image})`}}>
+                                            </a>
+                                            <div className="home-top100-name">
+                                                {top.name}
+                                            </div>
+                                        </div>
+                                    )
+                                })}
+                            </div>
+                        </div> */}
                     </div>
                 </div>
                 {/* End content */}
